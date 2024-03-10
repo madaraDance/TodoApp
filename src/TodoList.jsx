@@ -1,11 +1,15 @@
 export default TodoList;
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 import { useRef, useState } from "react";
 /*import TodoTable from "./TodoTable";*/
 import { AgGridReact } from "ag-grid-react";
+import { DatePicker } from '@mui/x-date-pickers';
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
+import { TextField } from '@mui/material';
 
 
 function TodoList() {
@@ -20,8 +24,8 @@ function TodoList() {
     const gridRef = useRef(); 
 
     const handleChange = (event) => {
-        if (event.target.id === 'date') {
-            setDesc({...desc, date : event.target.value});
+        if (event.$d) {
+            setDesc({...desc, date : event.$d.toLocaleDateString()});
         } else if (event.target.id === 'description') {
             setDesc({...desc, description : event.target.value});
         } else {
@@ -56,12 +60,14 @@ function TodoList() {
         <>
             <div className="container">
                 <fieldset>
-                    <legend>Add Todo</legend> 
-                    <label className="desc">Description:</label><input id ="description" placeholder="Task todo" onChange={handleChange} value = {desc.description} />
-                    <label className="prio">Priority:</label><input id = "priority"placeholder="High, Meduim or Low" onChange={handleChange} value ={desc.priority} />
-                    <label className="date">Date:</label><input id ="date" placeholder="Date to complete" onChange={handleChange} value = {desc.date} />
-                    <button onClick={addTodo}>Add</button>
-                    <button onClick={handleDelete}>Delete</button>
+                    <legend>Add Todo</legend>
+                    <Stack mt={2} direction="row" spacing={2} justifyContent="center" alignItems="center">
+                        <TextField className="desc" label="Task" id ="description" placeholder="Task todo" onChange={handleChange} value = {desc.description} />
+                        <TextField className="prio" label="Priority" id="priority"placeholder="High, Meduim or Low" onChange={handleChange} value ={desc.priority} />
+                        <DatePicker className="date" label = "Date" id="date" placeholder="Date to complete" onChange={handleChange} value = {desc.date} />
+                        <Button variant="contained" color="primary" onClick={addTodo}>Add</Button>
+                        <Button variant="contained" color='error' onClick={handleDelete}>Delete</Button>
+                    </Stack>
                 </fieldset>
             </div>
             <div className="ag-theme-material" style={{width: 900, height: 300}}>
